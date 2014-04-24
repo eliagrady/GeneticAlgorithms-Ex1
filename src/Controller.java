@@ -1,4 +1,5 @@
 import eightQueens.EightQueenModel;
+import eightQueens.GAEightQueenSolver;
 import eightQueens.RandomEightQueenSolver;
 
 /**
@@ -22,11 +23,13 @@ public class Controller {
 
     }
 
-    public void outputRandomSolution() {
+    public void outputRandomEightQueenSolution() {
         RandomEightQueenSolver reqs = new RandomEightQueenSolver();
         System.out.println(EightQueenModel.eightQueensPuzzleToString(reqs.getSolution()));
     }
-
+    public void outputGAEightQueenSolution() {
+        GAEightQueenSolver gaeqs = new GAEi
+    }
 
 
 }
