@@ -1,4 +1,3 @@
-/Controller.class
-/Main.class
-/api/
-/eightQueens/
+/controller/
+/model/
+/view/
