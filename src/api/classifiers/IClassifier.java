@@ -1,7 +1,6 @@
-package api.classifiers;
 
-import controller.Pair;
 
+import api.Pair;
 import java.util.ArrayList;
 
 /**

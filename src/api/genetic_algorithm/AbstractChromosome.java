@@ -1,6 +1,6 @@
 package api.genetic_algorithm;
 
-import controller.Pair;
+import api.Pair;
 
 /**
  * The AbstractChromosome class,

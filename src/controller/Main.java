@@ -2,7 +2,6 @@ package controller;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 
 /**
@@ -20,10 +19,11 @@ public class Main {
 
         Thread controllerThread = new Thread(new Controller());
 
-        Future controllerFuture = pool.submit(controllerThread);
-        while(!controllerFuture.isDone()) {
-            //keep alive
-        }
+        //Future controllerFuture = pool.submit(controllerThread);
+        pool.execute(controllerThread);
+//        while(!controllerFuture.isDone()) {
+//            //keep alive
+//        }
 
     }
 }

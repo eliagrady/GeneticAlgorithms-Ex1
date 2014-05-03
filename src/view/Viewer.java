@@ -1,20 +1,22 @@
 package view;
 
 import controller.Controller;
-import javax.swing.*;
-
 /**
- * Created by Elia on 02/05/2014.
+ * PACKAGE_NAME
+ * Created by: Elia Grady
+ * ID : 300907060
+ * Username:  gradyel
  */
-public class Viewer {
-    private final MyFrame myFrame;
+public class Viewer implements Runnable {
     private Controller controller;
-    private JButton runButton;
-    private JPanel panel1;
-    private JProgressBar progressBar1;
+    private MyFrame myFrame;
 
     public Viewer(Controller controller) {
-        this.myFrame = new MyFrame(controller);
         this.controller = controller;
+    }
+
+    @Override
+    public void run() {
+        this.myFrame = new MyFrame(controller);
     }
 }

@@ -1,9 +1,15 @@
 package view;
+
 import controller.Controller;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 
 
@@ -16,67 +22,70 @@ import java.io.File;
 public class MyFrame extends JFrame {
     public static final int WIDTH = 640;
     public static final int HEIGHT = 480;
-    private static final String TITLE = "Evolutionary Algorithms - Ex1";
     private final Controller controller;
     private JPanel rootPanel;
+    private JButton runButton;
+    private JComboBox comboBox1;
+    private JSpinner spinner1;
+    private JFormattedTextField formattedTextField1;
+    private JProgressBar progressBar1;
+    private JSlider mutationProbabilitySlider;
+    private JPanel mutationProbability;
+    private JTextField mutationProbabilityValue;
 
-    private JButton setTrain;
-    private JButton setTest;
+    private JButton setPart1Population;
+    private JButton setPart1;
     private JButton setClustering;
     private JButton setOutput;
-    private JButton run;
 
     public MyFrame(Controller controller) {
-        super(TITLE);
+        super("GA-Ex1");
         setContentPane(rootPanel);
         this.controller = controller;
         initFrameSizeAndLocation();
 
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-
         initButtons();
-
+        setVisible(true);
     }
 
     private void initButtons() {
-        setTrain.addActionListener(new ActionListener() {
+
+        runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String folder = loadFileDialog();
-                controller.setFolder(Controller.Folder.TRAIN, folder);
+                //Do bindings
             }
         });
 
-        setTest.addActionListener(new ActionListener() {
+        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String folder = loadFileDialog();
-                controller.setFolder(Controller.Folder.TEST, folder);
+            public void propertyChange(PropertyChangeEvent evt) {
+                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
             }
         });
 
-        setClustering.addActionListener(new ActionListener() {
+        mutationProbabilitySlider.addChangeListener(new ChangeListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String folder = loadFileDialog();
-                controller.setFolder(Controller.Folder.CLUSTER, folder);
+            public void stateChanged(ChangeEvent e) {
+                mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue()));
             }
         });
 
-        setOutput.addActionListener(new ActionListener() {
+        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String folder = loadFileDialog();
-                controller.setFolder(Controller.Config.OUTPUT, folder);
+            public void propertyChange(PropertyChangeEvent evt) {
+                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
             }
         });
 
-
-
-
-
+        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
+            }
+        });
     }
 
     public void initFrameSizeAndLocation() {

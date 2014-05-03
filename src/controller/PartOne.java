@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.ArrayList;
-
 import model.StopWatch;
 import model.eight_queens_puzzle.EightQueensVisualizer;
 import model.eight_queens_puzzle.genetic_solver.GeneticEightQueensSolver;
 import model.eight_queens_puzzle.random_solver.RandomEightQueensSolver;
+
+import java.util.ArrayList;
 
 /**
  * The PartOne class.

@@ -1,6 +1,6 @@
 package model.eight_queens_puzzle.genetic_solver;
 
-import controller.Pair;
+import api.Pair;
 import api.genetic_algorithm.AbstractChromosome;
 
 import java.util.ArrayList;

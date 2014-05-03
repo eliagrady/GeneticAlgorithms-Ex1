@@ -3,6 +3,7 @@ package controller;
 import api.ann.activation_functions.BoundedReLU;
 import api.ann.activation_functions.IActivationFunction;
 import com.google.common.primitives.Ints;
+import view.Viewer;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,9 +19,195 @@ import java.util.ArrayList;
  */
 public class Controller implements Runnable
 {
+    private final Viewer viewer;
+
+    public Controller() {
+        this.viewer = new Viewer(this);
+    }
+
+
+    //Start of configuration inner-class
+
     protected static class Config {
         // part one parameters
         private static int sizeOf_Population = 1500;
+
+        public static int getSizeOf_Population() {
+            return sizeOf_Population;
+        }
+
+        public static void setSizeOf_Population(int sizeOf_Population) {
+            Config.sizeOf_Population = sizeOf_Population;
+        }
+
+        public static int getMutationProbability() {
+            return mutationProbability;
+        }
+
+        public static void setMutationProbability(int mutationProbability) {
+            Config.mutationProbability = mutationProbability;
+        }
+
+        public static int getElitism() {
+            return elitism;
+        }
+
+        public static void setElitism(int elitism) {
+            Config.elitism = elitism;
+        }
+
+        public static int getMaxFitness() {
+            return maxFitness;
+        }
+
+        public static void setMaxFitness(int maxFitness) {
+            Config.maxFitness = maxFitness;
+        }
+
+        public static int getNumOf_Generations() {
+            return numOf_Generations;
+        }
+
+        public static void setNumOf_Generations(int numOf_Generations) {
+            Config.numOf_Generations = numOf_Generations;
+        }
+
+        public static String getBaseFolder() {
+            return baseFolder;
+        }
+
+        public static void setBaseFolder(String baseFolder) {
+            Config.baseFolder = baseFolder;
+        }
+
+        public static URL getLocation() {
+            return location;
+        }
+
+        public static void setLocation(URL location) {
+            Config.location = location;
+        }
+
+        public static String getBaseMain() {
+            return baseMain;
+        }
+
+        public static void setBaseMain(String baseMain) {
+            Config.baseMain = baseMain;
+        }
+
+        public static String getTrainExamples_FilePath() {
+            return trainExamples_FilePath;
+        }
+
+        public static void setTrainExamples_FilePath(String trainExamples_FilePath) {
+            Config.trainExamples_FilePath = trainExamples_FilePath;
+        }
+
+        public static String getValidateOne_FilePath() {
+            return validateOne_FilePath;
+        }
+
+        public static void setValidateOne_FilePath(String validateOne_FilePath) {
+            Config.validateOne_FilePath = validateOne_FilePath;
+        }
+
+        public static String getValidateTwo_FilePath() {
+            return validateTwo_FilePath;
+        }
+
+        public static void setValidateTwo_FilePath(String validateTwo_FilePath) {
+            Config.validateTwo_FilePath = validateTwo_FilePath;
+        }
+
+        public static String getTestExamples_FilePath() {
+            return testExamples_FilePath;
+        }
+
+        public static void setTestExamples_FilePath(String testExamples_FilePath) {
+            Config.testExamples_FilePath = testExamples_FilePath;
+        }
+
+        public static String getOutputFilePath() {
+            return outputFilePath;
+        }
+
+        public static void setOutputFilePath(String outputFilePath) {
+            Config.outputFilePath = outputFilePath;
+        }
+
+        public static IActivationFunction getActivationFunction() {
+            return activationFunction;
+        }
+
+        public static void setActivationFunction(IActivationFunction activationFunction) {
+            Config.activationFunction = activationFunction;
+        }
+
+        public static double getLearningRate() {
+            return learningRate;
+        }
+
+        public static void setLearningRate(double learningRate) {
+            Config.learningRate = learningRate;
+        }
+
+        public static double getMomentum() {
+            return momentum;
+        }
+
+        public static void setMomentum(double momentum) {
+            Config.momentum = momentum;
+        }
+
+        public static int getNumOf_Epochs() {
+            return numOf_Epochs;
+        }
+
+        public static void setNumOf_Epochs(int numOf_Epochs) {
+            Config.numOf_Epochs = numOf_Epochs;
+        }
+
+        public static int getNumOf_TrainExamples() {
+            return numOf_TrainExamples;
+        }
+
+        public static void setNumOf_TrainExamples(int numOf_TrainExamples) {
+            Config.numOf_TrainExamples = numOf_TrainExamples;
+        }
+
+        public static int getNumOf_ValidationExamples() {
+            return numOf_ValidationExamples;
+        }
+
+        public static void setNumOf_ValidationExamples(int numOf_ValidationExamples) {
+            Config.numOf_ValidationExamples = numOf_ValidationExamples;
+        }
+
+        public static int getNumOf_Attributes() {
+            return numOf_Attributes;
+        }
+
+        public static void setNumOf_Attributes(int numOf_Attributes) {
+            Config.numOf_Attributes = numOf_Attributes;
+        }
+
+        public static int getNumOf_ClassValues() {
+            return numOf_ClassValues;
+        }
+
+        public static void setNumOf_ClassValues(int numOf_ClassValues) {
+            Config.numOf_ClassValues = numOf_ClassValues;
+        }
+
+        public static ArrayList<Integer> getSizesOf_Layers() {
+            return sizesOf_Layers;
+        }
+
+        public static void setSizesOf_Layers(ArrayList<Integer> sizesOf_Layers) {
+            Config.sizesOf_Layers = sizesOf_Layers;
+        }
+
         private static int mutationProbability = 100;
         private static int elitism = 2;
         private static int maxFitness = 28;
@@ -53,6 +240,9 @@ public class Controller implements Runnable
                 Config.numOf_Attributes, 100, Config.numOf_ClassValues }));
 
     }
+
+
+    //End of configuration inner-class
 
 
     /**
@@ -129,8 +319,6 @@ public class Controller implements Runnable
 
     @Override
     public void run() {
-        while (true) {
-            //listen to commands and remain alive
-        }
+        viewer.run();
     }
 }

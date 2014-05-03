@@ -1,12 +1,13 @@
 package controller;
 
+import api.Pair;
+import api.ann.ArtificialNeuronNetwork;
+import api.ann.activation_functions.IActivationFunction;
+import model.StopWatch;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-
-import model.StopWatch;
-import api.ann.ArtificialNeuronNetwork;
-import api.ann.activation_functions.IActivationFunction;
 
 /**
  * The PartTwo class.
