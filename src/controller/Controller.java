@@ -280,7 +280,9 @@ public class Controller implements Runnable
             writer.close();
         }
 
-        catch (Exception e) {}
+        catch (Exception e) {
+            //
+        }
     }
 
     /**
