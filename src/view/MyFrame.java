@@ -26,13 +26,15 @@ public class MyFrame extends JFrame {
     private final Controller controller;
     private JPanel rootPanel;
     private JButton runButton;
-    private JSpinner spinner1;
+    private JSpinner initialPopulation;
     private JProgressBar progressBar1;
     private JSlider mutationProbabilitySlider;
     private JPanel mutationProbability;
     private JTextField mutationProbabilityValue;
     private JScrollPane consoleScrollPane;
     private JTextArea consoleTextarea;
+    private JSpinner elitism;
+    private JSpinner numOfGenerations;
 
     private JButton setPart1Population;
     private JButton setPart1;
@@ -94,9 +96,14 @@ public class MyFrame extends JFrame {
     }
 
     private void initButtons() {
-
-
-
+        //Set the bounds of the initial population spinner (part one)
+        initialPopulation.setModel(new SpinnerNumberModel(1500,2,10000,100));
+        initialPopulation.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(initialPopulation.getValue())));
+            }
+        });
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,14 +111,38 @@ public class MyFrame extends JFrame {
             }
         });
 
+        mutationProbabilitySlider.setPaintTicks(true);
+        mutationProbabilitySlider.setPaintLabels(true);
+        mutationProbabilitySlider.setLabelTable(mutationProbabilitySlider.createStandardLabels(25));
+        mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue())+"%");
         mutationProbabilitySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue()));
+                mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue())+"%");
+                controller.configPart1.setMutationProbability(Integer.valueOf(String.valueOf(mutationProbabilitySlider.getValue())));
             }
         });
 
+
+        elitism.setModel(new SpinnerNumberModel(0,0,100,1));
+        elitism.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(elitism.getValue())));
+            }
+        });
+
+        numOfGenerations.setModel(new SpinnerNumberModel(0,0,10000,10));
+        numOfGenerations.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(numOfGenerations.getValue())));
+            }
+        });
+        progressBar1.
     }
+
+
 
     public void initFrameSizeAndLocation() {
         //Sets the location
@@ -153,3 +184,9 @@ public class MyFrame extends JFrame {
         return filePath;
     }
 }
+
+
+
+
+
+
