@@ -1,16 +1,16 @@
 package api.ann;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
+import api.IClassifier;
 import api.Pair;
 import api.ann.activation_functions.IActivationFunction;
 import api.ann.neuron_layers.AbstractNeuronLayer;
 import api.ann.neuron_layers.HiddenNeuronLayer;
 import api.ann.neuron_layers.OutputNeuronLayer;
-import api.classifiers.IClassifier;
-import com.google.common.primitives.Doubles;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import com.google.common.primitives.Doubles;
 
 /**
  * The ArtificialNeuronNetwork class,
