@@ -139,7 +139,7 @@ public class MyFrame extends JFrame {
                 controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(numOfGenerations.getValue())));
             }
         });
-        progressBar1.
+
     }
 
 
