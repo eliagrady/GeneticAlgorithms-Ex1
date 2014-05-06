@@ -17,7 +17,7 @@ public class Main {
     {
         ExecutorService pool = Executors.newCachedThreadPool();
 
-        Thread controllerThread = new Thread(new Controller());
+        Thread controllerThread = new Thread(new Controller(pool));
 
         //Future controllerFuture = pool.submit(controllerThread);
         pool.execute(controllerThread);

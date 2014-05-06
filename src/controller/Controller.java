@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 
 /**
  * The OldMainToBeRenamed class,
@@ -20,224 +21,236 @@ import java.util.ArrayList;
 public class Controller implements Runnable
 {
     private final Viewer viewer;
+    protected ExecutorService threadPool;
+    public Config configPart1;
+    public Config configPart2;
 
-    public Controller() {
+    protected Controller(ExecutorService pool) {
         this.viewer = new Viewer(this);
+        this.threadPool = pool;
+        configPart1 = new Config();
+        configPart2 = new Config();
     }
 
 
     //Start of configuration inner-class
 
-    protected static class Config {
-        // part one parameters
-        private static int sizeOf_Population = 1500;
+    public class Config {
+        /**
+         * Config constructor
+         */
+        public Config() {
 
-        public static int getSizeOf_Population() {
+        }
+        // part one parameters
+        private int sizeOf_Population = 1500;
+
+        public int getSizeOf_Population() {
             return sizeOf_Population;
         }
 
-        public static void setSizeOf_Population(int sizeOf_Population) {
-            Config.sizeOf_Population = sizeOf_Population;
+        public void setSizeOf_Population(int sizeOf_Population) {
+            this.sizeOf_Population = sizeOf_Population;
         }
 
-        public static int getMutationProbability() {
+        public int getMutationProbability() {
             return mutationProbability;
         }
 
-        public static void setMutationProbability(int mutationProbability) {
-            Config.mutationProbability = mutationProbability;
+        public void setMutationProbability(int mutationProbability) {
+            this.mutationProbability = mutationProbability;
         }
 
-        public static int getElitism() {
+        public int getElitism() {
             return elitism;
         }
 
-        public static void setElitism(int elitism) {
-            Config.elitism = elitism;
+        public void setElitism(int elitism) {
+            this.elitism = elitism;
         }
 
-        public static int getMaxFitness() {
+        public int getMaxFitness() {
             return maxFitness;
         }
 
-        public static void setMaxFitness(int maxFitness) {
-            Config.maxFitness = maxFitness;
+        public void setMaxFitness(int maxFitness) {
+            this.maxFitness = maxFitness;
         }
 
-        public static int getNumOf_Generations() {
+        public int getNumOf_Generations() {
             return numOf_Generations;
         }
 
-        public static void setNumOf_Generations(int numOf_Generations) {
-            Config.numOf_Generations = numOf_Generations;
+        public void setNumOf_Generations(int numOf_Generations) {
+            this.numOf_Generations = numOf_Generations;
         }
 
-        public static String getBaseFolder() {
+        public String getBaseFolder() {
             return baseFolder;
         }
 
-        public static void setBaseFolder(String baseFolder) {
-            Config.baseFolder = baseFolder;
+        public void setBaseFolder(String baseFolder) {
+            this.baseFolder = baseFolder;
         }
 
-        public static URL getLocation() {
+        public URL getLocation() {
             return location;
         }
 
-        public static void setLocation(URL location) {
-            Config.location = location;
+        public void setLocation(URL location) {
+            this.location = location;
         }
 
-        public static String getBaseMain() {
+        public String getBaseMain() {
             return baseMain;
         }
 
-        public static void setBaseMain(String baseMain) {
-            Config.baseMain = baseMain;
+        public void setBaseMain(String baseMain) {
+            this.baseMain = baseMain;
         }
 
-        public static String getTrainExamples_FilePath() {
+        public String getTrainExamples_FilePath() {
             return trainExamples_FilePath;
         }
 
-        public static void setTrainExamples_FilePath(String trainExamples_FilePath) {
-            Config.trainExamples_FilePath = trainExamples_FilePath;
+        public void setTrainExamples_FilePath(String trainExamples_FilePath) {
+            this.trainExamples_FilePath = trainExamples_FilePath;
         }
 
-        public static String getValidateOne_FilePath() {
+        public String getValidateOne_FilePath() {
             return validateOne_FilePath;
         }
 
-        public static void setValidateOne_FilePath(String validateOne_FilePath) {
-            Config.validateOne_FilePath = validateOne_FilePath;
+        public void setValidateOne_FilePath(String validateOne_FilePath) {
+            this.validateOne_FilePath = validateOne_FilePath;
         }
 
-        public static String getValidateTwo_FilePath() {
+        public String getValidateTwo_FilePath() {
             return validateTwo_FilePath;
         }
 
-        public static void setValidateTwo_FilePath(String validateTwo_FilePath) {
-            Config.validateTwo_FilePath = validateTwo_FilePath;
+        public void setValidateTwo_FilePath(String validateTwo_FilePath) {
+            this.validateTwo_FilePath = validateTwo_FilePath;
         }
 
-        public static String getTestExamples_FilePath() {
+        public String getTestExamples_FilePath() {
             return testExamples_FilePath;
         }
 
-        public static void setTestExamples_FilePath(String testExamples_FilePath) {
-            Config.testExamples_FilePath = testExamples_FilePath;
+        public void setTestExamples_FilePath(String testExamples_FilePath) {
+            this.testExamples_FilePath = testExamples_FilePath;
         }
 
-        public static String getOutputFilePath() {
+        public String getOutputFilePath() {
             return outputFilePath;
         }
 
-        public static void setOutputFilePath(String outputFilePath) {
-            Config.outputFilePath = outputFilePath;
+        public void setOutputFilePath(String outputFilePath) {
+            this.outputFilePath = outputFilePath;
         }
 
-        public static IActivationFunction getActivationFunction() {
+        public IActivationFunction getActivationFunction() {
             return activationFunction;
         }
 
-        public static void setActivationFunction(IActivationFunction activationFunction) {
-            Config.activationFunction = activationFunction;
+        public void setActivationFunction(IActivationFunction activationFunction) {
+            this.activationFunction = activationFunction;
         }
 
-        public static double getLearningRate() {
+        public double getLearningRate() {
             return learningRate;
         }
 
-        public static void setLearningRate(double learningRate) {
-            Config.learningRate = learningRate;
+        public void setLearningRate(double learningRate) {
+            this.learningRate = learningRate;
         }
 
-        public static double getMomentum() {
+        public double getMomentum() {
             return momentum;
         }
 
-        public static void setMomentum(double momentum) {
-            Config.momentum = momentum;
+        public void setMomentum(double momentum) {
+            this.momentum = momentum;
         }
 
-        public static int getNumOf_Epochs() {
+        public int getNumOf_Epochs() {
             return numOf_Epochs;
         }
 
-        public static void setNumOf_Epochs(int numOf_Epochs) {
-            Config.numOf_Epochs = numOf_Epochs;
+        public void setNumOf_Epochs(int numOf_Epochs) {
+            this.numOf_Epochs = numOf_Epochs;
         }
 
-        public static int getNumOf_TrainExamples() {
+        public int getNumOf_TrainExamples() {
             return numOf_TrainExamples;
         }
 
-        public static void setNumOf_TrainExamples(int numOf_TrainExamples) {
-            Config.numOf_TrainExamples = numOf_TrainExamples;
+        public void setNumOf_TrainExamples(int numOf_TrainExamples) {
+            this.numOf_TrainExamples = numOf_TrainExamples;
         }
 
-        public static int getNumOf_ValidationExamples() {
+        public int getNumOf_ValidationExamples() {
             return numOf_ValidationExamples;
         }
 
-        public static void setNumOf_ValidationExamples(int numOf_ValidationExamples) {
-            Config.numOf_ValidationExamples = numOf_ValidationExamples;
+        public void setNumOf_ValidationExamples(int numOf_ValidationExamples) {
+            this.numOf_ValidationExamples = numOf_ValidationExamples;
         }
 
-        public static int getNumOf_Attributes() {
+        public int getNumOf_Attributes() {
             return numOf_Attributes;
         }
 
-        public static void setNumOf_Attributes(int numOf_Attributes) {
-            Config.numOf_Attributes = numOf_Attributes;
+        public void setNumOf_Attributes(int numOf_Attributes) {
+            this.numOf_Attributes = numOf_Attributes;
         }
 
-        public static int getNumOf_ClassValues() {
+        public int getNumOf_ClassValues() {
             return numOf_ClassValues;
         }
 
-        public static void setNumOf_ClassValues(int numOf_ClassValues) {
-            Config.numOf_ClassValues = numOf_ClassValues;
+        public void setNumOf_ClassValues(int numOf_ClassValues) {
+            this.numOf_ClassValues = numOf_ClassValues;
         }
 
-        public static ArrayList<Integer> getSizesOf_Layers() {
+        public ArrayList<Integer> getSizesOf_Layers() {
             return sizesOf_Layers;
         }
 
-        public static void setSizesOf_Layers(ArrayList<Integer> sizesOf_Layers) {
-            Config.sizesOf_Layers = sizesOf_Layers;
+        public void setSizesOf_Layers(ArrayList<Integer> sizesOf_Layers) {
+            this.sizesOf_Layers = sizesOf_Layers;
         }
 
-        private static int mutationProbability = 100;
-        private static int elitism = 2;
-        private static int maxFitness = 28;
-        private static int numOf_Generations = 3000;
+        private int mutationProbability = 100;
+        private int elitism = 2;
+        private int maxFitness = 28;
+        private int numOf_Generations = 3000;
 
         // files paths
-        private static String baseFolder = System.getProperty("user.dir")+File.separator+"src";
-        private static URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        private static String baseMain = location.getFile();
+        private  String baseFolder = System.getProperty("user.dir")+File.separator+"src";
+        private  URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+        private  String baseMain = location.getFile();
 
-        private static String trainExamples_FilePath = "C:/Users/Omer/Desktop/train.txt";
-        private static String validateOne_FilePath = "C:/Users/Omer/Desktop/validate1.txt";
-        private static String validateTwo_FilePath = "C:/Users/Omer/Desktop/validate2.txt";
-        private static String testExamples_FilePath = "C:/Users/Omer/Desktop/test.txt";
-        private static String outputFilePath = "C:/Users/Omer/Desktop/output.txt";
+        private  String trainExamples_FilePath = "C:/Users/Omer/Desktop/train.txt";
+        private  String validateOne_FilePath = "C:/Users/Omer/Desktop/validate1.txt";
+        private  String validateTwo_FilePath = "C:/Users/Omer/Desktop/validate2.txt";
+        private  String testExamples_FilePath = "C:/Users/Omer/Desktop/test.txt";
+        private  String outputFilePath = "C:/Users/Omer/Desktop/output.txt";
         //private static final String attributesFilePath = "C:/Users/Omer/Desktop/attributes.txt";
 
         // part two parameters
-        private static IActivationFunction activationFunction = new BoundedReLU(1);
-        private static double learningRate = 0.001;
-        private static double momentum = 0.2;
-        private static int numOf_Epochs = 50;
+        private IActivationFunction activationFunction = new BoundedReLU(1);
+        private double learningRate = 0.001;
+        private double momentum = 0.2;
+        private int numOf_Epochs = 50;
 
-        private static int numOf_TrainExamples = 40000;
-        private static int numOf_ValidationExamples = 10000;
-        private static int numOf_Attributes = 784;
-        private static int numOf_ClassValues = 10;
-        private static ArrayList<Integer> sizesOf_Layers
+        private int numOf_TrainExamples = 40000;
+        private int numOf_ValidationExamples = 10000;
+        private int numOf_Attributes = 784;
+        private int numOf_ClassValues = 10;
+        private ArrayList<Integer> sizesOf_Layers
                 = new ArrayList<Integer>(Ints.asList(new int[]{
-                Config.numOf_Attributes, 100, Config.numOf_ClassValues }));
+                this.numOf_Attributes, 100, this.numOf_ClassValues }));
 
     }
 
@@ -252,67 +265,69 @@ public class Controller implements Runnable
      */
     private static void writeToFile(ArrayList<String> strings, String outputFilePath)
     {
-        
+
         // saves the report to file
         try
         {
-            
+
             PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath));
             for (String string : strings)
             {
-                
+
                 writer.println(string);
             }
-            
+
             writer.close();
         }
-        
-        catch (Exception e) {}
+
+        catch (Exception e) {
+            //
+        }
     }
-           
+
     /**
      * part one of the exercise.
      */
-    private static void partOne()
+    private void partOne(Config config)
     {
-        
+
         // creates part one API
         PartOne partOne = new PartOne(
-                Config.sizeOf_Population,
-                Config.mutationProbability,
-                Config.elitism,
-                Config.maxFitness,
-                Config.numOf_Generations);
-        
+                config.sizeOf_Population,
+                config.mutationProbability,
+                config.elitism,
+                config.maxFitness,
+                config.numOf_Generations);
+
         // finds a random solution
         partOne.randomEightQueensSolver();
-        
+
         // finds a genetic solution
         writeToFile(partOne.geneticEightQueensSolver(), null);
     }
-    
+
     /**
      * part two of the exercise.
      */
-    private static void partTwo()
+    private static void partTwo(Config config)
     {
 
         // creates part two API
         PartTwo partTwo = new PartTwo(
-                Config.trainExamples_FilePath,
-                Config.validateOne_FilePath,
-                Config.validateTwo_FilePath,
-                Config.testExamples_FilePath,
-                Config.sizesOf_Layers,
-                Config.activationFunction,
-                Config.learningRate,
-                Config.momentum,
-                Config.numOf_Epochs,
-                Config.numOf_TrainExamples,
-                Config.numOf_ValidationExamples,
-                Config.numOf_Attributes,
-                Config.numOf_ClassValues);
-        
+                config.trainExamples_FilePath,
+                config.validateOne_FilePath,
+                config.validateTwo_FilePath,
+                config.testExamples_FilePath,
+                config.sizesOf_Layers,
+                config.activationFunction,
+                config.learningRate,
+                config.momentum,
+                config.numOf_Epochs,
+                config.numOf_TrainExamples,
+                config.numOf_ValidationExamples,
+                config.numOf_Attributes,
+                config.numOf_ClassValues);
+
         // runs ANN
         partTwo.ann();
     }
@@ -321,4 +336,25 @@ public class Controller implements Runnable
     public void run() {
         viewer.run();
     }
+
+    public void runPartOne() {
+        final Runnable task = new Thread() {
+            @Override public void run() {
+                partOne(configPart1);
+            }
+        };
+        threadPool.submit(task);
+    }
+
+    public void runPartTwo() {
+        final Runnable task = new Thread() {
+            @Override public void run() {
+                partTwo(configPart2);
+            }
+        };
+        threadPool.submit(task);
+    }
+
+
+
 }

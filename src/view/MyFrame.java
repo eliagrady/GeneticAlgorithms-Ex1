@@ -8,9 +8,10 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 
 /**
@@ -25,13 +26,15 @@ public class MyFrame extends JFrame {
     private final Controller controller;
     private JPanel rootPanel;
     private JButton runButton;
-    private JComboBox comboBox1;
-    private JSpinner spinner1;
-    private JFormattedTextField formattedTextField1;
+    private JSpinner initialPopulation;
     private JProgressBar progressBar1;
     private JSlider mutationProbabilitySlider;
     private JPanel mutationProbability;
     private JTextField mutationProbabilityValue;
+    private JScrollPane consoleScrollPane;
+    private JTextArea consoleTextarea;
+    private JSpinner elitism;
+    private JSpinner numOfGenerations;
 
     private JButton setPart1Population;
     private JButton setPart1;
@@ -41,6 +44,15 @@ public class MyFrame extends JFrame {
     public MyFrame(Controller controller) {
         super("GA-Ex1");
         setContentPane(rootPanel);
+        consoleScrollPane.setMinimumSize(new Dimension(500,500));
+        consoleScrollPane.setViewportView(consoleTextarea);
+
+        //REDIRECTION
+        redirectSystemStreams();
+
+        Font font = new Font( "Monospaced", Font.PLAIN, 12 );
+        consoleTextarea.setFont(font);
+
         this.controller = controller;
         initFrameSizeAndLocation();
 
@@ -50,43 +62,87 @@ public class MyFrame extends JFrame {
         setVisible(true);
     }
 
-    private void initButtons() {
 
-        runButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Do bindings
-            }
-        });
+    private void updateTextArea(final String text) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                consoleTextarea.append(text);
+                consoleTextarea.setCaretPosition(consoleTextarea.getDocument().getLength());
 
-        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
-            }
-        });
-
-        mutationProbabilitySlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue()));
-            }
-        });
-
-        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
-            }
-        });
-
-        mutationProbabilitySlider.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                mutationProbabilityValue.setText(String.valueOf(evt.getNewValue()));
             }
         });
     }
+
+    private void redirectSystemStreams() {
+        OutputStream out = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                updateTextArea(String.valueOf((char) b));
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                updateTextArea(new String(b, off, len));
+            }
+
+            @Override
+            public void write(byte[] b) throws IOException {
+                write(b, 0, b.length);
+            }
+        };
+
+        System.setOut(new PrintStream(out, true));
+        System.setErr(new PrintStream(out, true));
+    }
+
+    private void initButtons() {
+        //Set the bounds of the initial population spinner (part one)
+        initialPopulation.setModel(new SpinnerNumberModel(1500,2,10000,100));
+        initialPopulation.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(initialPopulation.getValue())));
+            }
+        });
+        runButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.runPartOne();
+            }
+        });
+
+        mutationProbabilitySlider.setPaintTicks(true);
+        mutationProbabilitySlider.setPaintLabels(true);
+        mutationProbabilitySlider.setLabelTable(mutationProbabilitySlider.createStandardLabels(25));
+        mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue())+"%");
+        mutationProbabilitySlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mutationProbabilityValue.setText(String.valueOf(mutationProbabilitySlider.getValue())+"%");
+                controller.configPart1.setMutationProbability(Integer.valueOf(String.valueOf(mutationProbabilitySlider.getValue())));
+            }
+        });
+
+
+        elitism.setModel(new SpinnerNumberModel(0,0,100,1));
+        elitism.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(elitism.getValue())));
+            }
+        });
+
+        numOfGenerations.setModel(new SpinnerNumberModel(0,0,10000,10));
+        numOfGenerations.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.configPart1.setSizeOf_Population(Integer.parseInt(String.valueOf(numOfGenerations.getValue())));
+            }
+        });
+
+    }
+
+
 
     public void initFrameSizeAndLocation() {
         //Sets the location
@@ -108,7 +164,7 @@ public class MyFrame extends JFrame {
         int rVal;
 
         // filter allowed extensions
-        //FileFilter scnFilter = new FileNameExtensionFilter("SCN file", "scn");
+        //FileFilter scnFilter = new FileNameExtensionFilter("Config file", "config");
         //FileFilter viwFilter = new FileNameExtensionFilter("VIW file", "viw");
         //fileChooser.addChoosableFileFilter(scnFilter);
         //fileChooser.addChoosableFileFilter(viwFilter);
@@ -128,3 +184,9 @@ public class MyFrame extends JFrame {
         return filePath;
     }
 }
+
+
+
+
+
+
